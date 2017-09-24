@@ -36,19 +36,19 @@ messages = {
 """Hello, {member}, welcome to the group. Please read the pinned message."""
 
 ,"grp_step1":
-"""LIKE RECENT ROUND
+"""❤️ LIKE RECENT ROUND ❤️
 
-D R O P - <b>@username</b>
+❤️ D R O P - <b>@username</b>
 ── OR ──
-D R O P - <b>@username</b> with <b>@givinglikes</b>
+❤️ D R O P - <b>@username</b> with <b>@givinglikes</b>
 
-To get out of drop, just enter /remove <b>@username</b>"""
+To get out of round, just type /remove <b>@username</b>"""
 
 ,"grp_step1.5":
-"""DROP IF YOU HAVEN'T"""
+"""❤️ DROP IG USERNAME IF YOU HAVEN'T ❤️"""
 
 ,"grp_step2":
-"""DROP TIME IS OVER
+"""❤️ DROP TIME IS OVER ❤️
 
 👁🗨ROUND INFO👁🗨
 Participants: {participants}
@@ -56,11 +56,14 @@ Accounts: {accounts}
 DM Lists: {igdm_lists}"""
 
 ,"grp_step2.5":
-"""LIKE MOST RECENT
-
-{timeleft} MINUTES!
-
-LEECHING = BAN
+"""❤️❤️ LIKE Post Terbaru Sahaja ❤️❤️
+Bagi yang pertama kali join round:
+1. Private message BOT dan type /start
+2. Pergi ke ROUND GROUP dan click SEND LISTS
+3. BOT akan PM senarai akaun untuk di LIKE
+.
+Pastikan anda selesai LIKE dalam masa {timeleft}!
+Sesiapa yg drop nama tapi tidak LIKE akaun dalam list = BAN.
 
 PM admins for any issues"""
 
@@ -70,13 +73,13 @@ PM admins for any issues"""
 NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 
 ,"grp_nextround":
-"""Next round in: {hms}"""
+"""👉👉 Next round in: {hms} 👈👈"""
 
 ,"grp_baddrop":
 """Please drop correctly: <b>@example</b>"""
 
 ,"grp_gooddrop":
-"""Added"""
+"""Added to this round"""
 
 ,"grp_badremove":
 """Please remove one at a time: <b>/remove @example</b>"""
@@ -112,20 +115,20 @@ NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 """/start me privately first, then press this button again."""
 
 ,"btn_igdm_lists":
-"""Send lists"""
+"""KLIK UTK DAPATKAN LIST"""
 
 ,"prv_hello":
 """Hello, I am a round bot."""
 
 ,"prv_lists_header":
-"""U S E R S"""
+"""SENARAI AKAUN UNTUK ROUND INI"""
 
 ,"prv_lists_igdm":
 """List {page} of {total}
 <b>{usernames}</b>"""
 
 ,"prv_lists_footer":
-"""The lists are above this message!"""
+"""Pastikan anda LIKE semua akaun dalam list ni. Kegagalan = BAN"""
 
 ,"prv_adm_help":
 """Group commands:
