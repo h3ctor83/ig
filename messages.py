@@ -56,11 +56,11 @@ Accounts: {accounts}
 DM Lists: {igdm_lists}"""
 
 ,"grp_step2.5":
-"""❤️❤️ LIKE MOST RECENT ❤️❤️
+"""❤️❤️ LIKE Post Terbaru Sahaja ❤️❤️
 
-{timeleft} MINUTES!
+{timeleft} MINUTES LEFT!
 
-LEECHING = BAN
+Sesiapa yg drop nama tapi tidak LIKE akaun dalam list = BAN
 
 PM admins for any issues"""
 
