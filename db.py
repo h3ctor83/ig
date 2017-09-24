@@ -1,17 +1,23 @@
 import config
 from messages import messages
 import pymysql
+import urllib.parse
+
+import config as S
 
 con = None
 
 def initialize():
     '''Create the tables if they don't exist'''
     global con
+    urllib.parse.uses_netloc.append("mysql")
+    url = urllib.parse.urlparse(S.DATABASE_URL)
     con = pymysql.connect(
-        host=config.DATABASE_URL,
-        user=config.DATABASE_USERNAME,
-        password=config.DATABASE_PASSWORD,
-        db=config.DATABASE_NAME,
+        db=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port,
         charset='utf8mb4',
         cursorclass=pymysql.cursors.DictCursor,
         autocommit=True,)

@@ -6,10 +6,7 @@ import os
 BOT_TOKEN = os.environ['BOT_TOKEN']                    #bot token
 IG_USERNAME = os.environ['IG_USERNAME']                #instagram username
 IG_PASSWORD = os.environ['IG_PASSWORD']                #instagram password
-DATABASE_URL = os.environ['DATABASE_URL']              #root url for mysql database
-DATABASE_USERNAME = os.environ['DATABASE_USERNAME']    #database username
-DATABASE_PASSWORD = os.environ['DATABASE_PASSWORD']    #database password
-DATABASE_NAME = os.environ['DATABASE_NAME']            #database name
+DATABASE_URL = os.environ['JAWSDB_URL']                #full url for mysql database (with credentials)
 WEBHOOK_URL = os.environ['WEBHOOK_URL']                #your app's address e.g. https://yourapp.herokuapp.com/
 LEECHER_CHECKERS = int(os.environ['LEECHER_CHECKERS']) #how many accounts to check at the same time. I don't know if IG might block you if set too high
 
@@ -20,10 +17,7 @@ LEECHER_CHECKERS = int(os.environ['LEECHER_CHECKERS']) #how many accounts to che
 #BOT_TOKEN = ""
 #IG_USERNAME = ""
 #IG_PASSWORD = ""
-#DATABASE_URL = 'localhost'
-#DATABASE_USERNAME = 'user'
-#DATABASE_PASSWORD = 'password'
-#DATABASE_NAME = 'test'
+#DATABASE_URL = 'mysql://user:password@localhost/test'
 #WEBHOOK_URL = None
 #LEECHER_CHECKERS = 10
 
