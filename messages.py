@@ -45,7 +45,7 @@ messages = {
 To get out of round, just type /remove <b>@username</b>"""
 
 ,"grp_step1.5":
-"""❤️ DROP IF YOU HAVEN'T ❤️"""
+"""❤️ DROP IG USERNAME IF YOU HAVEN'T ❤️"""
 
 ,"grp_step2":
 """❤️ DROP TIME IS OVER ❤️
@@ -57,10 +57,13 @@ DM Lists: {igdm_lists}"""
 
 ,"grp_step2.5":
 """❤️❤️ LIKE Post Terbaru Sahaja ❤️❤️
-
-{timeleft} MINUTES LEFT!
-
-Sesiapa yg drop nama tapi tidak LIKE akaun dalam list = BAN
+Bagi yang pertama kali join round:
+1. Private message BOT dan type /start
+2. Pergi ke ROUND GROUP dan click SEND LISTS
+3. BOT akan PM senarai akaun untuk di LIKE
+.
+Pastikan anda selesai LIKE dalam masa {timeleft}!
+Sesiapa yg drop nama tapi tidak LIKE akaun dalam list = BAN.
 
 PM admins for any issues"""
 
@@ -76,7 +79,7 @@ NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 """Please drop correctly: <b>@example</b>"""
 
 ,"grp_gooddrop":
-"""Added"""
+"""Added to this round"""
 
 ,"grp_badremove":
 """Please remove one at a time: <b>/remove @example</b>"""
@@ -112,7 +115,7 @@ NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 """/start me privately first, then press this button again."""
 
 ,"btn_igdm_lists":
-"""Send lists"""
+"""KLIK UTK DAPATKAN LIST"""
 
 ,"prv_hello":
 """Hello, I am a round bot."""
