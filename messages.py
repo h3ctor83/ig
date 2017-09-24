@@ -59,7 +59,7 @@ DM Lists: {igdm_lists}"""
 """❤️❤️ LIKE Post Terbaru Sahaja ❤️❤️
 Bagi yang pertama kali join round:
 1. Private message BOT dan type /start
-2. Pergi ke ROUND GROUP dan click SEND LISTS
+2. Pergi ke ROUND GROUP dan KLIK UTK DAPATKAN LIST
 3. BOT akan PM senarai akaun untuk di LIKE
 .
 Pastikan anda selesai LIKE dalam masa {timeleft}!
