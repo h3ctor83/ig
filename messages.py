@@ -121,14 +121,14 @@ NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 """Hello, I am a round bot."""
 
 ,"prv_lists_header":
-"""U S E R S"""
+"""SENARAI AKAUN UNTUK ROUND INI"""
 
 ,"prv_lists_igdm":
 """List {page} of {total}
 <b>{usernames}</b>"""
 
 ,"prv_lists_footer":
-"""The lists are above this message!"""
+"""Pastikan anda LIKE semua akaun dalam list ni. Kegagalan = BAN"""
 
 ,"prv_adm_help":
 """Group commands:
