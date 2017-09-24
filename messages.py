@@ -36,19 +36,19 @@ messages = {
 """Hello, {member}, welcome to the group. Please read the pinned message."""
 
 ,"grp_step1":
-"""LIKE RECENT ROUND
+"""❤️ LIKE RECENT ROUND ❤️
 
-D R O P - <b>@username</b>
+❤️ D R O P - <b>@username</b>
 ── OR ──
-D R O P - <b>@username</b> with <b>@givinglikes</b>
+❤️ D R O P - <b>@username</b> with <b>@givinglikes</b>
 
-To get out of drop, just enter /remove <b>@username</b>"""
+To get out of round, just type /remove <b>@username</b>"""
 
 ,"grp_step1.5":
-"""DROP IF YOU HAVEN'T"""
+"""❤️ DROP IF YOU HAVEN'T ❤️"""
 
 ,"grp_step2":
-"""DROP TIME IS OVER
+"""❤️ DROP TIME IS OVER ❤️
 
 👁🗨ROUND INFO👁🗨
 Participants: {participants}
@@ -56,7 +56,7 @@ Accounts: {accounts}
 DM Lists: {igdm_lists}"""
 
 ,"grp_step2.5":
-"""LIKE MOST RECENT
+"""❤️ LIKE MOST RECENT ❤️
 
 {timeleft} MINUTES!
 
@@ -70,7 +70,7 @@ PM admins for any issues"""
 NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 
 ,"grp_nextround":
-"""Next round in: {hms}"""
+"""❤️ Next round in: {hms} ❤️"""
 
 ,"grp_baddrop":
 """Please drop correctly: <b>@example</b>"""
