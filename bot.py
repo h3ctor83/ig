@@ -892,6 +892,10 @@ def shutdown(signum, frame):
     if config.POWERED_ON:
         config.POWERED_ON = False
         print('SHUTING DOWN')
+        for chat in chats.values():
+            print(' Stopping timer for', chat.cid)
+            chat.timer.cancel()
+        print(' Good bye')
         sys.exit(0)
     else:
         print('SHUT DOWN - sorry Im already shutting down')
