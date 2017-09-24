@@ -40,7 +40,7 @@ ADMINS = [
     ]
 
 '''Settings applicable to the group'''
-ROUND_SCHED = "17" #hours when to start a new round. No fractions. Separate with space
+ROUND_SCHED = "16" #hours when to start a new round. No fractions. Separate with space
 PERCENTAGE_TO_LEECH = 20    #if a user fails to like this % of names, count as a leech
 LEECHES_TO_BAN = 2          #when a user leeches this many rounds, he is banned
 ALLOW_TALK = 1              #allow off-topic conversations without any nagging (0 for OFF, or 1 for ON)
