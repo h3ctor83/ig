@@ -56,7 +56,7 @@ Accounts: {accounts}
 DM Lists: {igdm_lists}"""
 
 ,"grp_step2.5":
-"""❤️ LIKE MOST RECENT ❤️
+"""❤️❤️ LIKE MOST RECENT ❤️❤️
 
 {timeleft} MINUTES!
 
@@ -70,7 +70,7 @@ PM admins for any issues"""
 NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 
 ,"grp_nextround":
-"""❤️ Next round in: {hms} ❤️"""
+"""👉👉 Next round in: {hms} 👈👈"""
 
 ,"grp_baddrop":
 """Please drop correctly: <b>@example</b>"""
