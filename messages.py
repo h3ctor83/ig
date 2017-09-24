@@ -42,13 +42,13 @@ messages = {
 ── OR ──
 ❤️ D R O P - <b>@username</b> with <b>@givinglikes</b>
 
-To get out of round, just type /remove <b>@username</b>"""
+Untuk keluar dari round, type /remove <b>@username</b>"""
 
 ,"grp_step1.5":
-"""❤️ DROP IG USERNAME IF YOU HAVEN'T ❤️"""
+"""❤️ DROP IG USERNAME SEKARANG ❤️"""
 
 ,"grp_step2":
-"""❤️ DROP TIME IS OVER ❤️
+"""❤️ MASA DROP TAMAT ❤️
 
 👁🗨ROUND INFO👁🗨
 Participants: {participants}
