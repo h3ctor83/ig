@@ -71,7 +71,7 @@ PM admins for any issues"""
 ,"grp_step3":
 """Checking Leechers!
 
-NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
+NEXT AUTO ROUND @ {nextsched} (UTC{tz:+d})"""
 
 ,"grp_nextround":
 """👉👉 Next round akan bermula dalam masa: {hms} 👈👈"""
