@@ -37,18 +37,19 @@ messages = {
 
 ,"grp_step1":
 """❤️ LIKE RECENT ROUND ❤️
+Round akan dimulakan dalam masa 30 minit.
 
 ❤️ D R O P - <b>@username</b>
 ── OR ──
 ❤️ D R O P - <b>@username</b> with <b>@givinglikes</b>
 
-To get out of round, just type /remove <b>@username</b>"""
+Untuk keluar dari round lepas anda dah drop name, type /remove <b>@username</b>"""
 
 ,"grp_step1.5":
-"""❤️ DROP IG USERNAME IF YOU HAVEN'T ❤️"""
+"""❤️ DROP IG USERNAME SEKARANG ❤️"""
 
 ,"grp_step2":
-"""❤️ DROP TIME IS OVER ❤️
+"""❤️ MASA DROP SUDAH TAMAT ❤️
 
 👁🗨ROUND INFO👁🗨
 Participants: {participants}
@@ -59,7 +60,7 @@ DM Lists: {igdm_lists}"""
 """❤️❤️ LIKE Post Terbaru Sahaja ❤️❤️
 Bagi yang pertama kali join round:
 1. Private message BOT dan type /start
-2. Pergi ke ROUND GROUP dan click SEND LISTS
+2. Pergi ke ROUND GROUP dan KLIK UTK DAPATKAN LIST di atas
 3. BOT akan PM senarai akaun untuk di LIKE
 .
 Pastikan anda selesai LIKE dalam masa {timeleft}!
@@ -73,13 +74,13 @@ PM admins for any issues"""
 NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 
 ,"grp_nextround":
-"""👉👉 Next round in: {hms} 👈👈"""
+"""👉👉 Next round akan bermula dalam masa: {hms} 👈👈"""
 
 ,"grp_baddrop":
 """Please drop correctly: <b>@example</b>"""
 
 ,"grp_gooddrop":
-"""Added to this round"""
+"""Joined this round"""
 
 ,"grp_badremove":
 """Please remove one at a time: <b>/remove @example</b>"""
@@ -103,13 +104,13 @@ NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 """BANNED: {name}"""
 
 ,"err_removebad":
-"""ERROR: <b>@{igname}</b> not found or it's not dropped by you!"""
+"""ERROR: <b>@{igname}</b> not found! anda hanya boleh remove jika anda dah drop utk join round kali ini!"""
 
 ,"err_donebad":
 """ERROR: <b>@{igname}</b> not found or it's not dropped by you!"""
 
 ,"err_duplicate":
-"""ERROR: <b>@{igname}</b> is already dropped by {tgname}"""
+"""ERROR: <b>@{igname}</b> sudah dimasukkan dalam round oleh {tgname}"""
 
 ,"err_bot_blocked":
 """/start me privately first, then press this button again."""
@@ -128,7 +129,7 @@ NEXT AUTO ROUND @ {nextsched} (UTC+{tz})"""
 <b>{usernames}</b>"""
 
 ,"prv_lists_footer":
-"""Pastikan anda LIKE semua akaun dalam list ni. Kegagalan = BAN"""
+"""Pastikan anda LIKE semua akaun dalam list ni. Kegagalan 2x = BAN"""
 
 ,"prv_adm_help":
 """Group commands:
