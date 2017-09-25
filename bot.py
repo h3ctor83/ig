@@ -768,7 +768,7 @@ class Chat():
         cmd = msg['text'].split()
         #check if it's the most current button
         if self.curr_round != int(cmd[2]):
-            User.answerCallbackQuery(msg, 'popup_expired_round', show_alert=True)
+            User.answerCbq(msg, 'popup_expired_round', show_alert=True)
         else:
             #check if user has started the bot
             try:
