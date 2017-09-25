@@ -149,6 +149,11 @@ class Chat():
         self.allow_talk = config.ALLOW_TALK #row['allow_talk']
         self.timer = None
         self.lists = None
+        #change round schedule back to UTC
+        #I use a string instead of a list so it can be easily moved to env variable
+        self.round_sched = map(int, self.round_sched.split())
+        self.round_sched = [t-self.timezone for t in self.round_sched]
+        self.round_sched = sorted(t if t>= 0 else t+24 for t in self.round_sched)
     #start running chats when bot boots
     def boot_timers():
         '''Starts the timers for running groups when the bot boots'''
@@ -326,7 +331,7 @@ class Chat():
         now = time.time()
         #no need to calculate all this if only for the next call
         if to != 'call':
-            sched = sorted(map(int, self.round_sched.split()))
+            sched = self.round_sched
             struct = time.gmtime(now)
             #finds the next hour to start a round
             for t in sched:
@@ -362,7 +367,8 @@ class Chat():
             timeleft = int(timeleft)
             return '{}:{:02}:{:02}'.format(timeleft//3600, timeleft%3600//60, timeleft%60)
         elif format == 'date':
-            return time.strftime("%F %T", time.gmtime(next))
+            #when printing the time, convert back to timezone
+            return time.strftime("%F %T", time.gmtime(next + self.timezone*3600))
         else:
             raise ValueError('"format" must be "hms" or "s"')
         
