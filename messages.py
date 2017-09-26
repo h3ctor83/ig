@@ -37,7 +37,7 @@ messages = {
 
 ,"grp_step1":
 """❤️ LIKE RECENT ROUND ❤️
-Round akan dimulakan dalam masa 30 minit.
+Round akan dimulakan dalam masa {m} minit.
 
 ❤️ D R O P - <b>@username</b>
 ── OR ──
@@ -71,10 +71,12 @@ PM admins for any issues"""
 ,"grp_step3":
 """Checking Leechers!
 
-NEXT AUTO ROUND @ {nextsched} (UTC{tz:+d})"""
+NEXT AUTO ROUND @ {nextsched} (UTC{tz:+d})
+Dropping starts {m} minutes before."""
 
 ,"grp_nextround":
-"""👉👉 Next round akan bermula dalam masa: {hms} 👈👈"""
+"""👉👉 Next round akan bermula dalam masa: {hms} 👈👈
+Dropping starts {m} minutes before."""
 
 ,"grp_baddrop":
 """Please drop correctly: <b>@example</b>"""
@@ -92,16 +94,16 @@ NEXT AUTO ROUND @ {nextsched} (UTC{tz:+d})"""
 """No Current Round!"""
 
 ,"grp_doneok":
-"""Done: [<b>@{igname}</b> by: {tgname}]"""
+"""Done: [<b>@{igname}</b>]"""
 
 ,"grp_doneok_with":
-"""Done: [<b>@{igname}</b> by: {tgname} engaged with: <b>@{igwith}</b>]"""
+"""Done: [<b>@{igname}</b> engaged with: <b>@{igwith}</b>]"""
 
 ,"grp_leecher":
-"""LEECHER: {name}"""
+"""LEECHER: <a href="tg://user?id={uid}">{name}</a>"""
 
 ,"grp_banned":
-"""BANNED: {name}"""
+"""BANNED: <a href="tg://user?id={uid}">{name}</a>"""
 
 ,"err_removebad":
 """ERROR: <b>@{igname}</b> not found! anda hanya boleh remove jika anda dah drop utk join round kali ini!"""
@@ -110,7 +112,7 @@ NEXT AUTO ROUND @ {nextsched} (UTC{tz:+d})"""
 """ERROR: <b>@{igname}</b> not found or it's not dropped by you!"""
 
 ,"err_duplicate":
-"""ERROR: <b>@{igname}</b> sudah dimasukkan dalam round oleh {tgname}"""
+"""ERROR: <b>@{igname}</b> was already dropped."""
 
 ,"err_bot_blocked":
 """/start me privately first, then press this button again."""

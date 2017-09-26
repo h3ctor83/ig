@@ -28,7 +28,6 @@ def initialize():
         #names_given    total number of times that user has dropped a username
         #names_liked    total number times that user has liked someone else
         #times_leeched  number of rounds he was considered a leecher
-        #username       last recorded telegram username
         #first_name     last recorded telegram first_name
         try:
             cur.execute('''CREATE TABLE users (
@@ -37,7 +36,6 @@ def initialize():
                 names_given     INT DEFAULT 0,
                 names_liked     INT DEFAULT 0,
                 rounds_leeched  INT DEFAULT 0,
-                username        TEXT,
                 first_name      TEXT
                 );''')
         except pymysql.err.InternalError as e:
@@ -132,16 +130,16 @@ def add_entries(chat, msg, entries):
         #dynamically set the sql to match the number of entries
         names = ','.join(['%s']*((len(args)-2)//2))
         cur.execute(
-            """SELECT uname, username, first_name
+            """SELECT uname, uid
                FROM users INNER JOIN entries USING (uid)
                WHERE cid=%s AND round_num=%s AND (uname IN ({names}) OR wname in ({names}));""".format(names=names), args)
         duplicate = cur.fetchall()
         if duplicate:
             message = '\n'.join(messages['err_duplicate'].format(
                         igname = row['uname'],
-                        tgname = '@'+row['username'] if row['username'] else row['first_name'])
+                        )
                     for row in duplicate)
-            return (message, {'reply_to_message_id':msg['message_id']})
+            return (message, None)
         
         #insert the user
         try:
@@ -156,9 +154,9 @@ def add_entries(chat, msg, entries):
         #truncate name if too long and remove bad chars
         first_name = msg['from']['first_name']
         if len(first_name) > 12: first_name = first_name[:10]+'…'
-        #update rounds joined, names given, name and username of user
-        args = (0 if dropped['count'] else 1, len(entries), first_name, msg['from']['username'].lower() if msg['from'].get('username') else None, msg['from']['id'])
-        cur.execute('UPDATE users SET rounds_joined=rounds_joined+%s, names_given=names_given+%s, first_name=%s, username=%s WHERE uid = %s;', args)
+        #update rounds joined, names given, name of user
+        args = (0 if dropped['count'] else 1, len(entries), first_name, msg['from']['id'])
+        cur.execute('UPDATE users SET rounds_joined=rounds_joined+%s, names_given=names_given+%s, first_name=%s WHERE uid = %s;', args)
         
         #finally insert the entries
         args = ((msg['from']['id'], chat.cid, msg['message_id'], chat.curr_round, entry['uname'], entry['wname'])
@@ -174,7 +172,7 @@ def update_entries(chat, msg, dones):
         #get all unames and wnames to check for ownership / diplicity
         args = (chat.cid, chat.curr_round)
         cur.execute('SELECT uid, uname, wname FROM entries WHERE cid=%s AND round_num=%s;', args)
-        results = results.fetchall()
+        results = cur.fetchall()
         owned = set(row['uname'] for row in results if row['uid'] == msg['from']['id'])
         locked = (set(row['uname'] for row in results) | set(row['wname'] for row in results)) - owned
         errors = set()
@@ -207,7 +205,6 @@ def update_entries(chat, msg, dones):
         #send confirmation message
         message = '\n'.join(messages['grp_doneok_with' if done['wname'] else 'grp_doneok'].format(
                     igname = done['uname'],
-                    tgname = '@'+msg['from']['username'] if msg['from'].get('username') else msg['from']['first_name'],
                     igwith = done['wname'])
                 for done in dones)
         return (message, None)

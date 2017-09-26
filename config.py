@@ -38,9 +38,9 @@ ROUND_SCHED = "12 15" #local hours when to start a new round. No fractions. Sepa
 PERCENTAGE_TO_LEECH = 20    #if a user fails to like this % of names, count as a leech
 LEECHES_TO_BAN = 2          #when a user leeches this many rounds, he is banned
 ALLOW_TALK = 1              #allow off-topic conversations without any nagging (0 for OFF, or 1 for ON)
-STEP1_LEN = 1800            #seconds to spend in step1 (collecting drops). Default = 1800
+STEP1_LEN = 1800            #seconds to spend collecting drops. This starts before the scheduled round time
 STEP1_CALLS = 300           #seconds between reminders to drop. Default = 600
-STEP2_LEN = 3600            #seconds to spend in step2 (waiting for "dones"). Default = 3600
+STEP2_LEN = 3600            #seconds users have to do the liking (waiting for "dones"). Default = 3600
 TIMEZONE = +8               #UTC+X of the group's time zone
 
 '''More general bot settings'''

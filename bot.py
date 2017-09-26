@@ -13,6 +13,7 @@ import logging
 import telepot
 from InstagramAPI import Instagram, InstagramException
 from pymysql.err import OperationalError
+from urllib3.exceptions import ProtocolError, ReadTimeoutError
 
 from messages import messages
 import config
@@ -119,8 +120,11 @@ class User():
     def cmd_show_dropped(uid, msg):
         for chat in chats.values():
             results = db.select("SELECT * FROM entries INNER JOIN users USING (uid) WHERE cid = %s AND round_num = %s;", args=(chat.cid, chat.curr_round), fetch='all')
-            dropped = '\n'.join('<b>@{iguname}</b>{igwname} by <a href="t.me/{tguname}">{fname}</a>'.format(
-                            iguname=entry['uname'], tguname=entry['username'], fname=html(entry['first_name'][:10]),  igwname=' with <b>@{}</b>'.format(entry['wname']) if entry['wname'] != entry['uname'] else '')
+            dropped = '\n'.join('<b>@{iguname}</b>{igwname} by <a href="tg://user?id={tguid}">{fname}</a>'.format(
+                            iguname=entry['uname'],
+                            tguid=entry['uid'],
+                            fname=html(entry['first_name']),
+                            igwname=' with <b>@{}</b>'.format(entry['wname']) if entry['wname'] != entry['uname'] else '')
                         for entry in results)
             round_info = 'Showing prev round' if chat.curr_step >= 3 else 'Drops open' if chat.curr_step == 1 else 'Drops closed' if chat.curr_step == 2 else 'Group stopped'
             User.sendMessage(uid, 'Group: {cid}\n{round_info} (round {rnum})\n{dropped}'.format(cid=chat.cid, round_info=round_info, rnum=chat.curr_round, dropped=dropped if dropped else 'None'))
@@ -152,8 +156,7 @@ class Chat():
         #change round schedule back to UTC
         #I use a string instead of a list so it can be easily moved to env variable
         self.round_sched = map(int, self.round_sched.split())
-        self.round_sched = [t-self.timezone for t in self.round_sched]
-        self.round_sched = sorted(t if t>= 0 else t+24 for t in self.round_sched)
+        self.round_sched = sorted((t-self.timezone)%24 for t in self.round_sched)
     #start running chats when bot boots
     def boot_timers():
         '''Starts the timers for running groups when the bot boots'''
@@ -211,7 +214,10 @@ class Chat():
         else:
             self.timer = threading.Timer(timeleft, self.start_step2)
         self.timer.start()
-        self.sendMessage('grp_step1')
+        self.sendMessage('grp_step1', format={
+                'm':config.STEP1_LEN//60,
+                }
+            )
     
     #call while waiting for drops
     def call_step1(self):
@@ -260,7 +266,11 @@ class Chat():
         self.curr_step = 3
         self.step_start = now
         if not silentstart:
-            self.sendMessage('grp_step3', format={'nextsched':self.calc_timeleft(to='step2', format='date'), 'tz':self.timezone})
+            self.sendMessage('grp_step3', format={
+                    'nextsched':self.calc_timeleft(to='step2', format='date'),
+                    'tz':self.timezone,
+                    'm':config.STEP1_LEN//60
+                })
         
         #make sure I am logged in and working
         error = test_insta()
@@ -292,17 +302,21 @@ class Chat():
         print(self.cid, 'leecher check done')
         #1111 debug
         if config.DEBUG_LEECHER_MESSAGE:
-            leechers = db.select('SELECT username, wname, unames_leeched FROM users INNER JOIN entries USING (uid) WHERE cid=%s AND round_num=%s AND unames_leeched > 0;',
+            leechers = db.select('SELECT uid, first_name, wname, unames_leeched FROM users INNER JOIN entries USING (uid) WHERE cid=%s AND round_num=%s AND unames_leeched > 0;',
                         (self.cid, self.curr_round), fetch='all')
             if leechers:
-                message = '\n'.join('<b>@{}</b> by @{}: {:.0%}'.format(leecher['wname'], leecher['username'], leecher['unames_leeched']/len(entries))
-                    for leecher in leechers)
+                message = '\n'.join('<b>@{drop}</b> by <a href="tg://user?id={uid}">{fname}</a>: {percent:.0%}'.format(
+                            drop = leecher['wname'],
+                            uid = leecher['uid'],
+                            fname = html(leecher['first_name']),
+                            percent = leecher['unames_leeched']/len(entries))
+                        for leecher in leechers)
                 self.sendMessage("Leecher percentage:\n" + message)
         #finally, punish the leechers
-        leechers = db.select('SELECT uid, username, first_name, rounds_leeched FROM users INNER JOIN entries USING (uid) WHERE cid=%s AND round_num=%s AND unames_leeched/%s >= %s GROUP BY uid;',
+        leechers = db.select('SELECT uid, first_name, rounds_leeched FROM users INNER JOIN entries USING (uid) WHERE cid=%s AND round_num=%s AND unames_leeched/%s >= %s GROUP BY uid;',
                     (self.cid, self.curr_round, float(len(entries)), config.PERCENTAGE_TO_LEECH/100), fetch='all')
         if leechers:
-            message = '\n'.join(messages['grp_leecher' if leecher['rounds_leeched'] < config.LEECHES_TO_BAN -1 else 'grp_banned'].format(name = '@'+leecher['username'] if leecher['username'] else leecher['first_name'])
+            message = '\n'.join(messages['grp_leecher' if leecher['rounds_leeched'] < config.LEECHES_TO_BAN -1 else 'grp_banned'].format(uid=leecher['uid'], name=html(leecher['first_name']))
                 for leecher in leechers)
             self.sendMessage(message)
             db.execute('UPDATE users SET rounds_leeched=rounds_leeched+1 WHERE uid in (SELECT uid FROM entries WHERE cid=%s AND round_num=%s AND unames_leeched/%s >= %s GROUP BY uid);',
@@ -396,7 +410,10 @@ class Chat():
     def sendMessage(self, text, reply_markup=None, reply_to_message_id=None, disable_web_page_preview=True, parse_mode='HTML', format=None):
         #apply formatting on specific messages
         if text == "grp_nextround":
-            text = messages[text].format(hms = self.calc_timeleft(to='step2', format='hms'))
+            text = messages[text].format(
+                    hms = self.calc_timeleft(to='step2', format='hms'),
+                    m=config.STEP1_LEN//60
+                )
         elif text in messages:
             text = messages[text]
         #apply general kwargs formatting
@@ -414,7 +431,7 @@ class Chat():
                 chats.pop(self.cid, None)
                 db.execute('DELETE FROM chats WHERE cid = %s;', (self.cid,))
                 retries = 0
-            except (urllib3.exceptions.ProtocolError, urllib3.exceptions.ReadTimeoutError):
+            except (ProtocolError, ReadTimeoutError):
                 #in case of timeouts, try again
                 retries -= 1
     #send a list to a user
@@ -685,7 +702,7 @@ class Chat():
                 return
             #finally if I got here there were no errors, try to add
             message = db.add_entries(self, msg, drops)
-            #warn in case of errors
+            #send the result of the adding
             self.sendMessage(message[0], format=message[1], reply_to_message_id=msg['message_id'])
         
         #if confirming
