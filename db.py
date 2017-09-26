@@ -214,8 +214,8 @@ def remove_entry(chat, msg, entry):
     con.ping(reconnect=True)
     with con.cursor() as cur:
         #try to delete right away
-        affected = cur.execute('DELETE FROM entries WHERE uid=%s AND cid=%s AND round_num=%s AND uname=%s;',
-                                (msg['from']['id'], chat.cid, chat.curr_round, entry))
+        affected = cur.execute('DELETE FROM entries WHERE uid=%s AND cid=%s AND round_num=%s AND (uname=%s OR wname=%s);',
+                                (msg['from']['id'], chat.cid, chat.curr_round, entry, entry))
         #if no row was affected, show error
         if affected == 0:
             return ('err_removebad', {'igname': entry})
@@ -223,4 +223,4 @@ def remove_entry(chat, msg, entry):
             cur.execute('UPDATE users SET names_given = names_given - 1 WHERE uid=%s;',
                             (msg['from']['id'],))
             print('Removed entry', entry)
-            return ('Removed @{igname}', {'igname': entry})
+            return ('grp_removeok', {'igname': entry})

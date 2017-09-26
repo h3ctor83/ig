@@ -87,6 +87,9 @@ Dropping starts {m} minutes before."""
 ,"grp_badremove":
 """Please remove one at a time: <b>/remove @example</b>"""
 
+,"grp_removeok":
+"""Removed: <b>@{igname}</b>"""
+
 ,"grp_quiet":
 """Please don't speak here!"""
 
