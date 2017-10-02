@@ -79,13 +79,18 @@ class User():
         if args[1].startswith('@'):
             args[1] = args[1][1:]
         #search for the username in db
-        result = db.select('SELECT uid FROM users WHERE username = %s;',
-            (args[1].lower(),), fetch='one')
+        try:
+            target_uid = int(args[1])
+            result = db.select('SELECT uid, first_name FROM users WHERE uid = %s;',
+                (target_uid,), fetch='one')
+        except ValueError:
+            result = db.select('SELECT uid, first_name FROM users WHERE username = %s;',
+                (args[1].lower(),), fetch='one')
         if result:
             db.execute('UPDATE users SET rounds_leeched = 0 WHERE uid = %s;',
                 (result['uid'],))
             config.BANNED.discard(result['uid'])
-            User.sendMessage(uid, "Unbanned")
+            User.sendMessage(uid, 'Unbanned <a href="tg://user?id={uid}">{fname}</a>', format={'uid':result['uid'], 'fname':html(result['first_name'])})
         else:
             User.sendMessage(uid, "Not found")
     def cmd_ban(uid, msg):
@@ -95,13 +100,18 @@ class User():
         if args[1].startswith('@'):
             args[1] = args[1][1:]
         #search for the username in db
-        result = db.select('SELECT uid FROM users WHERE username = %s;',
-            (args[1].lower(),), fetch='one')
+        try:
+            target_uid = int(args[1])
+            result = db.select('SELECT uid, first_name FROM users WHERE uid = %s;',
+                (target_uid,), fetch='one')
+        except ValueError:
+            result = db.select('SELECT uid, first_name FROM users WHERE username = %s;',
+                (args[1].lower(),), fetch='one')
         if result:
             db.execute('UPDATE users SET rounds_leeched = 99 WHERE uid = %s;',
                 (result['uid'],))
             config.BANNED.add(result['uid'])
-            User.sendMessage(uid, "Banned")
+            User.sendMessage(uid, 'Banned <a href="tg://user?id={uid}">{fname}</a>', format={'uid':result['uid'], 'fname':html(result['first_name'])})
         else:
             User.sendMessage(uid, "Not found")
     def cmd_test_insta(uid, msg):
