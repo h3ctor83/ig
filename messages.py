@@ -37,19 +37,19 @@ messages = {
 
 ,"grp_step1":
 """❤️ LIKE RECENT ROUND ❤️
-Round akan dimulakan dalam masa {m} minit.
+Round will start in {m} minutes.
 
 ❤️ D R O P - <b>@username</b>
 ── OR ──
 ❤️ D R O P - <b>@username</b> with <b>@givinglikes</b>
 
-Untuk keluar dari round lepas anda dah drop name, type /remove <b>@username</b>"""
+To leave rounds after dropping your name, type /remove <b>@username</b>"""
 
 ,"grp_step1.5":
-"""❤️ DROP IG USERNAME SEKARANG ❤️"""
+"""❤️ DROP IG USERNAME NOW ❤️"""
 
 ,"grp_step2":
-"""❤️ MASA DROP SUDAH TAMAT ❤️
+"""❤️ DROP TIME IS OVER ❤️
 
 👁🗨ROUND INFO👁🗨
 Participants: {participants}
@@ -57,14 +57,19 @@ Accounts: {accounts}
 DM Lists: {igdm_lists}"""
 
 ,"grp_step2.5":
-"""❤️❤️ LIKE Post Terbaru Sahaja ❤️❤️
+"""❤️❤️ LIKE LATEST POST ONLY ❤️❤️
 Bagi yang pertama kali join round:
 1. Private message BOT dan type /start
 2. Pergi ke ROUND GROUP dan KLIK UTK DAPATKAN LIST di atas
 3. BOT akan PM senarai akaun untuk di LIKE
+
+For first timer:
+1. PM BOT and type /start
+2. Go to ROund Group and click on KLIK UTK DAPATKAN LIST
+3. The BOT will PM you list of accounts to like for the particular round
 .
-Pastikan anda selesai LIKE dalam masa {timeleft}!
-Sesiapa yg drop nama tapi tidak LIKE akaun dalam list = BAN.
+Do your LIKES in {timeleft}!
+Leechers (drop names but did not like other people's account) = BAN.
 
 PM admins for any issues"""
 
@@ -75,7 +80,7 @@ NEXT AUTO ROUND @ {nextsched} (UTC{tz:+d})
 Dropping starts {m} minutes before."""
 
 ,"grp_nextround":
-"""👉👉 Next round akan bermula dalam masa: {hms} 👈👈
+"""👉👉 Next round will start in: {hms} 👈👈
 Dropping starts {m} minutes before."""
 
 ,"grp_baddrop":
@@ -127,14 +132,14 @@ Dropping starts {m} minutes before."""
 """Hello, I am a round bot."""
 
 ,"prv_lists_header":
-"""SENARAI AKAUN UNTUK ROUND INI"""
+"""LIST OF ACCOUNTS TO LIKE"""
 
 ,"prv_lists_igdm":
 """List {page} of {total}
 <b>{usernames}</b>"""
 
 ,"prv_lists_footer":
-"""Pastikan anda LIKE semua akaun dalam list ni. Kegagalan 2x = BAN"""
+"""Make sure you like all the accounts here. Failure = BAN"""
 
 ,"prv_adm_help":
 """Group commands:
