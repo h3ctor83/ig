@@ -121,6 +121,12 @@ def execute(sql, args=None):
     with con.cursor() as cur:
         cur.execute(sql, args)
 
+def executemany(sql, args=None):
+    '''Exec a statement with ping'''
+    con.ping(reconnect=True)
+    with con.cursor() as cur:
+        cur.executemany(sql, args)
+
 def add_entries(chat, msg, entries):
     '''enters entries (uname, wname) if they are all valid'''
     con.ping(reconnect=True)
