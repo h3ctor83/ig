@@ -301,7 +301,6 @@ class Chat():
             self.start_step4()
             return
         #if there's no error, lets check leechers
-        print(self.cid, 'getting all entries from DB')
         entries = db.select('SELECT uid, uname, wname, checked FROM entries WHERE cid=%s AND round_num=%s;',
                             (self.cid, self.curr_round), fetch='all')
         #set of all those who should do the liking
@@ -309,6 +308,7 @@ class Chat():
         #mark all entries that failed to like anyone
         pool = ThreadPool(config.LEECHER_CHECKERS)
         self.LEECH = collections.Counter()
+        self.DEBUG_LEECHER_MESSAGE = ['#Check round {}'.format(self.curr_round),]
         results = pool.map(self.check_leechers, entries)
         pool.close()
         pool.join()
@@ -320,31 +320,49 @@ class Chat():
                     args = tuple( (self.LEECH[wname], self.cid, self.curr_round, wname) for wname in self.LEECH ))
 
         print(self.cid, 'leecher check done')
-        #1111 debug
         if config.DEBUG_LEECHER_MESSAGE:
+            #send leechers per name
+            group_size = 25
+            for i in range(0, len(self.DEBUG_LEECHER_MESSAGE), group_size):
+                for admin in config.ADMINS:
+                    try:
+                        bot.sendMessage(admin, '\n'.join(self.DEBUG_LEECHER_MESSAGE[i:i + group_size]), parse_mode='HTML')
+                    except:
+                        pass
             leechers = db.select('SELECT uid, first_name, wname, unames_leeched FROM users INNER JOIN entries USING (uid) WHERE cid=%s AND round_num=%s AND unames_leeched > 0;',
                         (self.cid, self.curr_round), fetch='all')
             if leechers:
-                message = '\n'.join('<b>@{drop}</b> by <a href="tg://user?id={uid}">{fname}</a>: {percent:.0%}'.format(
-                            drop = leecher['wname'],
-                            uid = leecher['uid'],
-                            fname = html(leecher['first_name']),
-                            percent = leecher['unames_leeched']/len(entries))
-                        for leecher in leechers)
-                self.sendMessage("Leecher percentage:\n" + message)
+                for i in range(0, len(leechers), group_size*2):
+                    message = "Leecher percentage:\n" + '\n'.join('<b>@{drop}</b> by <a href="tg://user?id={uid}">{fname}</a>: {percent:.0%}'.format(
+                                drop = leecher['wname'],
+                                uid = leecher['uid'],
+                                fname = html(leecher['first_name']),
+                                percent = leecher['unames_leeched']/len(entries))
+                            for leecher in leechers[i:i + group_size*2])
+                    print(message)
+                    for admin in config.ADMINS:
+                        try:
+                            bot.sendMessage(admin, message, parse_mode='HTML')
+                        except:
+                            pass
         #finally, punish the leechers
         leechers = db.select('SELECT uid, first_name, rounds_leeched FROM users INNER JOIN entries USING (uid) WHERE cid=%s AND round_num=%s AND unames_leeched/%s >= %s GROUP BY uid;',
                     (self.cid, self.curr_round, float(len(entries)), config.PERCENTAGE_TO_LEECH/100), fetch='all')
         if leechers:
-            message = '\n'.join(messages['grp_leecher' if leecher['rounds_leeched'] < config.LEECHES_TO_BAN -1 else 'grp_banned'].format(uid=leecher['uid'], name=html(leecher['first_name']))
-                for leecher in leechers)
-            self.sendMessage(message)
+            group_size = 60
+            for i in range(0, len(leechers), group_size):
+                message = '\n'.join(messages['grp_leecher' if leecher['rounds_leeched'] < config.LEECHES_TO_BAN -1 else 'grp_banned'].format(uid=leecher['uid'], name=html(leecher['first_name']))
+                    for leecher in leechers[i:i + group_size])
+                self.sendMessage(message)
             db.execute('UPDATE users SET rounds_leeched=rounds_leeched+1 WHERE uid in (SELECT uid FROM entries WHERE cid=%s AND round_num=%s AND unames_leeched/%s >= %s GROUP BY uid);',
                 (self.cid, self.curr_round, float(len(entries)), config.PERCENTAGE_TO_LEECH/100))
             config.BANNED.update(leecher['uid'] for leecher in leechers if leecher['rounds_leeched']+1 >= config.LEECHES_TO_BAN)
         elif config.DEBUG_LEECHER_MESSAGE:
-            self.sendMessage('No leechers') #1111
-            pass
+            for admin in config.ADMINS:
+                try:
+                    bot.sendMessage(admin, 'No leechers', parse_mode='HTML')
+                except:
+                    pass
         self.start_step4()
     
     #wait for next round
@@ -487,38 +505,40 @@ class Chat():
             if leeches:
                 #add one to the leech count of every entry that didn't like this
                 self.LEECH.update(leeches)
+                print(' -', entry['wname'], leeches, 'didnt like last photo')
                 if config.DEBUG_LEECHER_MESSAGE:
-                    self.sendMessage("<b>@{}</b> checked. <b>{}</b> didn't like the last photo.".format(entry['uname'], leeches))
+                    self.DEBUG_LEECHER_MESSAGE.append("<b>@{}</b> checked. <b>{}</b> didn't like last photo.".format(entry['uname'], leeches))
             else:
+                print(' -', entry['wname'], 'everyone liked it')
                 if config.DEBUG_LEECHER_MESSAGE:
-                    self.sendMessage("<b>@{}</b> checked. Everyone liked it.".format(entry['uname']))
+                    self.DEBUG_LEECHER_MESSAGE.append("<b>@{}</b> checked. Everyone liked it.".format(entry['uname']))
         except InstagramException as e:
             if e.args[0].startswith('login_required') or e.args[0].startswith('Not logged in'):
                 print(e)
                 if config.DEBUG_LEECHER_MESSAGE:
-                    self.sendMessage("Leecher error: could not login to instagram".format(entry['uname']))
+                    self.DEBUG_LEECHER_MESSAGE.append("{} Leecher error: could not login to instagram".format(entry['uname']))
             elif e.args[0].startswith('checkpoint_required'):
                 print(e)
                 if config.DEBUG_LEECHER_MESSAGE:
-                    self.sendMessage("Leecher error: could not login to instagram".format(entry['uname']))
+                    self.DEBUG_LEECHER_MESSAGE.append("{} Leecher error: could not login to instagram".format(entry['uname']))
             elif e.args[0].startswith('User not found') or e.args[0].startswith('Not authorized to view user'):
-                print(' -', entry['uname'], 'Not found or private')
+                print(' -', entry['wname'], 'not found or private')
                 if config.DEBUG_LEECHER_MESSAGE:
-                    self.sendMessage("<b>@{}</b> not found or private.".format(entry['uname']))
+                    self.DEBUG_LEECHER_MESSAGE.append("<b>@{}</b> not found or private.".format(entry['uname']))
             else:
                 logging.exception(time.strftime('get_likers @ %Y-%m-%d %H:%M:%S'))
                 print(' -', entry['uname'], e)
+                if config.DEBUG_LEECHER_MESSAGE:
+                    self.DEBUG_LEECHER_MESSAGE.append("<b>@{}</b> {}".format(entry['uname'], e))
         except IndexError as e:
-            print(' -', entry['uname'], e)
+            print(' -', entry['wname'], 'has no photos')
             if config.DEBUG_LEECHER_MESSAGE:
-                self.sendMessage("<b>@{}</b> has no photos".format(entry['uname']))
+                self.DEBUG_LEECHER_MESSAGE.append("<b>@{}</b> has no photos".format(entry['uname']))
         except Exception as e:
             logging.exception(time.strftime('get_likers @ %Y-%m-%d %H:%M:%S'))
-            print(' -', entry['uname'], e)
+            print(' -', entry['wname'], e)
             if config.DEBUG_LEECHER_MESSAGE:
-                self.sendMessage("<b>@{}</b> error:{}".format(entry['uname'], e))
-        finally:
-            print(' -', entry['uname'], 'FINISHED')
+                self.DEBUG_LEECHER_MESSAGE.append("<b>@{}</b> error:{}".format(entry['uname'], e))
     #commands received in a group
     def cmd(msg):
         cid = msg['chat']['id']
