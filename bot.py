@@ -251,8 +251,8 @@ class Chat():
         args = (self.cid, self.curr_round)
         info = db.select('SELECT count(DISTINCT uid) as participants, count(DISTINCT uname) as accounts FROM entries WHERE cid = %s AND round_num = %s;', args, fetch='one')
         self.sendMessage('grp_step2', format={'participants':info['participants'], 'accounts':info['accounts'], 'igdm_lists':len(self.get_lists()['igdm'])})
-        #if there are accounts dropped, wait for step3
-        if info['accounts']:
+        #if more than one participant, wait for step3
+        if info['accounts'] > 1:
             db.execute('UPDATE chats SET curr_step = 2, step_start = %s WHERE cid = %s;', (now, self.cid))
             self.curr_step = 2
             self.step_start = now
